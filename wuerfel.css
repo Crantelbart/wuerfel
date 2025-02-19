@@ -1,0 +1,186 @@
+@charset "UTF-8";
+
+@media all {
+	html, body {
+		height: 100%;
+		width: 100%;
+		padding: 0;
+		margin: 0;
+	}
+
+	body {
+		color: white;
+		font-family: Roboto, sans-serif;
+		background-color: #424242;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 20px
+	}
+
+	body > div {
+		padding: 10px;
+	}
+
+	#dices {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		flex-direction: column;
+	}
+
+	#dices .dice {
+		margin: 5px;
+		height: calc(100% - 10px);
+		width: calc(100% - 10px);
+		border-radius: 20px;
+	}
+	#dices .dice {
+		position: relative;
+	}
+	#dices .dice.dice-2 {
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+		color: #424242;
+		background-color: #ffd969;
+	}
+
+	#dices .dice button {
+		background-color: transparent;
+		position: absolute;
+		bottom: 0;
+		padding: 20px;
+		font-size: 30px;
+		font-weight: bold;
+		border: none;
+		border-top: 1px solid #424242;
+		width: 50%;
+	}
+
+	#dices .dice button:nth-of-type(1) {
+		left: 0;
+	}
+
+	#dices .dice button:nth-of-type(2) {
+		border-left: 1px solid #424242;
+		right: 0;
+	}
+
+	#dices .dice.dice-4 {
+		background-color: #ff9b69;
+	}
+	#dices .dice.dice-6 {
+		background-color: #ff6975;
+	}
+	#dices .dice.dice-8 {
+		background-color: #ff6995;
+	}
+	#dices .dice.dice-10 {
+		background-color: #ff69f2;
+	}
+	#dices .dice.dice-12 {
+		background-color: #cd69ff;
+	}
+	#dices .dice.dice-20 {
+		background-color: #8e69ff;
+	}
+	#dices .dice.dice-100 {
+		background-color: #6982ff;
+	}
+
+	button[data-button].hide {
+		display: none;
+	}
+
+	#main {
+
+	}
+
+	#dice-area {
+		height: 600px;
+		width: 100%;
+		border: 2px solid hotpink;
+		border-radius: 20px;
+		margin-bottom: 20px;
+		margin-top: 10px;
+	}
+
+	#roll button {
+		background-color: hotpink;
+		width: 100%;
+		padding: 15px;
+		border: none;
+		border-radius: 20px;
+		font-size: 30px;
+		font-weight: bold;
+	}
+
+	#roll button:hover {
+		background-color: deeppink;
+		cursor: pointer;
+		transition: background-color 100ms linear;
+	}
+
+	#roll button:hover:active {
+		background-color: pink;
+		transition: background-color 100ms linear;
+	}
+
+	#roll button:hover:not(:active) {
+		color: white;
+	}
+
+	#stats {
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		flex-direction: column;
+	}
+
+	#stats > div {
+		margin: 5px;
+		height: calc(100% - 10px);
+		width: calc(100% - 10px);
+		border: 2px solid hotpink;
+		border-radius: 20px;
+	}
+
+	.dice[data-type="2"] {
+		background-image: url("images/circle.png");
+		background-repeat: no-repeat;
+		background-position-x: center;
+		background-position-y: 10%;
+		background-size: 50% 60%;
+	}
+
+	.dice[data-type="4"] {
+		/*background-image: url("images/type_4.png");*/
+	}
+
+
+	.dice[data-type="6"] {
+		background-image: url("images/square.png");
+		background-repeat: no-repeat;
+		background-position-x: center;
+		background-position-y: 10%;
+		background-size: 50% 60%;
+	}
+
+	.dice[data-type="8"] {
+		/*background-image: url("images/type_8.png");*/
+	}
+
+	.dice[data-type="10"] {
+		/*background-image: url("images/type_10.png");*/
+	}
+
+	.dice[data-type="12"] {
+		/*background-image: url("images/type_12.png");*/
+	}
+
+	.dice[data-type="20"] {
+		/*background-image: url("images/type_20.png");*/
+	}
+
+	.dice[data-type="100"] {
+		/*background-image: url("images/type_100.png");*/
+	}
+}

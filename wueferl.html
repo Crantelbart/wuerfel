@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8">
+		<title>Würfel</title>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" type="text/css" href="wuerfel.css">
+		<script type="text/javascript" src="wuerfel.js"></script>
+	</head>
+
+	<body>
+		<!-- Würfel -->
+		<div id="dices">
+			<div class="dice dice-2" data-type="2">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-4" data-type="4">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-6" data-type="6">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-8" data-type="8">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-10" data-type="10">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-12" data-type="12">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-20" data-type="20">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+			<div class="dice dice-100" data-type="100">
+				<button data-button="remove">-</button>
+				<button data-button="add">+</button>
+			</div>
+		</div>
+
+		<!-- Würfelbereich -->
+		<div id="main">
+			<div id="dice-area">
+				<div class="area-dice" data-type="2"></div>
+			</div>
+
+			<div id="roll">
+				<button>Würfeln</button>
+			</div>
+		</div>
+
+		<!-- Stats und Verlauf -->
+		<div id="stats">
+			<div id="stat">
+				stat
+			</div>
+
+			<div id="progress">
+				progress
+			</div>
+		</div>
+	</body>
+</html>
