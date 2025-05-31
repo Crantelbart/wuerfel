@@ -149,6 +149,10 @@
 		background-position-x: center;
 		background-position-y: 10%;
 		background-size: 50% 60%;
+		display: flex;
+
+		justify-content: center;
+		align-items: center;
 	}
 
 	.dice[data-type="4"] {
@@ -165,6 +169,7 @@
 	}
 
 	.dice[data-type="8"] {
+
 		/*background-image: url("images/type_8.png");*/
 	}
 
