@@ -1,6 +1,8 @@
 window.onload = function () {
 	let progress_index = 0;
 
+
+
 	// add and remove buttons click event
 	document.querySelectorAll('#dices button').forEach(button => {
 		button.addEventListener('click', e => {
@@ -43,8 +45,12 @@ window.onload = function () {
 		// Ausgabe zwischen Dice-Area und Würfel-Button
 		let result_div = document.querySelector('#result');
 		result_div.innerHTML = result.toString();
+
+		document.getElementById("progress").innerHTML = cars;
 	})
+
 }
+
 
 /**
  * Eine random Number mit min und max holen
@@ -54,22 +60,23 @@ window.onload = function () {
  * @returns {*}
  */
 function getRandomNumber(min, max) {
-	return Math.random() * (max - min) + min;
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
- * Fügt Würfel mit einem bestimmten Typen hinzuz
+ * Fügt Würfel mit einem bestimmten Typen hinzu
  * oder entfernt Würfel eines bestimmtes Types
  *
  * @param dice max. Augenanzahl eines Würfels
  * @param type remove/add
  */
 function removeOrAddDice (dice, type) {
+
 	let dice_area = document.querySelector('#dice-area');
 
 	if (type === "remove") {
-
-		let elem = dice_area.querySelector(".dice-area[data-type='" + dice + "']");
+		// Hier wurde die Klasse von '.dice-area' zu '.area-dice' geändert
+		let elem = dice_area.querySelector(".area-dice[data-type='" + dice + "']");
 
 		if (elem) {
 			elem.remove();
@@ -81,7 +88,6 @@ function removeOrAddDice (dice, type) {
 	}
 
 	checkNumberInArea(dice_area)
-
 	updateStatsWindow(dice_area);
 }
 
