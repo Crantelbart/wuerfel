@@ -1,4 +1,4 @@
-// hallo
+// hallo 12:34
 
 
 // Wartet, bis das DOM vollständig geladen ist
