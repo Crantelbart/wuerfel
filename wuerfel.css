@@ -28,21 +28,17 @@
 	}
 
 	#dices .dice {
+		/*color: black;*/
 		margin: 5px;
 		height: calc(100% - 10px);
 		width: calc(100% - 10px);
 		border-radius: 20px;
-	}
-	#dices .dice {
 		position: relative;
-	}
-	#dices .dice.dice-2 {
-		font-size: 20px;
-		font-weight: bold;
 		text-align: center;
+		font-size: 500%;
 		color: #424242;
-		background-color: #ffd969;
 	}
+
 
 	#dices .dice button {
 		background-color: transparent;
@@ -65,24 +61,34 @@
 		right: 0;
 	}
 
+	#dices .dice.dice-2 {
+		background-color: #ffd969;
+	}
+
 	#dices .dice.dice-4 {
 		background-color: #ff9b69;
 	}
+
 	#dices .dice.dice-6 {
 		background-color: #ff6975;
 	}
+
 	#dices .dice.dice-8 {
 		background-color: #ff6995;
 	}
+
 	#dices .dice.dice-10 {
 		background-color: #ff69f2;
 	}
+
 	#dices .dice.dice-12 {
 		background-color: #cd69ff;
 	}
+
 	#dices .dice.dice-20 {
 		background-color: #8e69ff;
 	}
+
 	#dices .dice.dice-100 {
 		background-color: #6982ff;
 	}
@@ -92,7 +98,8 @@
 	}
 
 	#main {
-
+	text-align: center;
+		font-size: 350%;
 	}
 
 	#dice-area {
@@ -102,6 +109,11 @@
 		border-radius: 20px;
 		margin-bottom: 20px;
 		margin-top: 10px;
+		text-align: center;
+		word-spacing: -2px;
+		line-height: 2;
+		align-items: center;
+		text-wrap: nowrap;
 	}
 
 	#roll button {
@@ -142,51 +154,17 @@
 		border: 2px solid hotpink;
 		border-radius: 20px;
 		overflow-y: hidden;
+		text-align: center;
+		word-spacing: -2px;
 	}
 
-	.dice[data-type="2"] {
-		background-image: url("images/circle.png");
-		background-repeat: no-repeat;
-		background-position-x: center;
-		background-position-y: 10%;
-		background-size: 50% 60%;
-		display: flex;
-
-		justify-content: center;
-		align-items: center;
+	#stat {
+		font-size: 275%;
 	}
-
-	.dice[data-type="4"] {
-		/*background-image: url("images/type_4.png");*/
-	}
-
-
-	.dice[data-type="6"] {
-		background-image: url("images/square.png");
-		background-repeat: no-repeat;
-		background-position-x: center;
-		background-position-y: 10%;
-		background-size: 50% 60%;
-	}
-
-	.dice[data-type="8"] {
-
-		/*background-image: url("images/type_8.png");*/
-	}
-
-	.dice[data-type="10"] {
-		/*background-image: url("images/type_10.png");*/
-	}
-
-	.dice[data-type="12"] {
-		/*background-image: url("images/type_12.png");*/
-	}
-
-	.dice[data-type="20"] {
-		/*background-image: url("images/type_20.png");*/
-	}
-
-	.dice[data-type="100"] {
-		/*background-image: url("images/type_100.png");*/
-	}
+	/*#main.result{*/
+	/*	text-align: center;*/
+	/*	color: white;*/
+	/*	!*font-weight: bold;*!*/
+	/*	!*font-size: 200%;*!*/
+	/*}*/
 }

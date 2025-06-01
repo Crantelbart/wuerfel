@@ -1,290 +1,290 @@
-hallo 13:22
-
-
-
-// Wartet, bis das DOM vollständig geladen ist
+/**
+ * Hauptfunktion die nach dem Laden der Seite ausgeführt wird
+ * Initialisiert alle Event-Listener und Variablen
+ */
 window.onload = function () {
-	// Zähler für Fortschrittsindex (wird für jede Würfelrunde erhöht)
+	// Zähler für die Fortschrittsanzeige (wird bei jedem Wurf erhöht)
 	let progress_index = 0;
-	// Array zum Speichern des Würfelverlaufs
+
+	// Array zum Speichern der Würfelverlaufseinträge (max. 20 Einträge)
 	let historyEntries = [];
 
-	// Holt das Div-Element für die Verlaufsanzeige
+	// Holt den Verlaufscontainer aus dem DOM
 	const historyDiv = document.querySelector('#history');
-	// Holt das Div-Element für die Statistik-Anzeige
+	// Holt den Statistikcontainer aus dem DOM
 	const statDiv = document.querySelector('#stat');
 
-	// Event-Listener für alle Buttons im #dices-Container
+	/**
+	 * Event-Listener für alle Würfel-Buttons (Hinzufügen/Entfernen)
+	 * Wird für jeden Button im #dices-Container registriert
+	 */
 	document.querySelectorAll('#dices button').forEach(button => {
 		// Fügt jedem Button einen Click-Event-Listener hinzu
 		button.addEventListener('click', e => {
 			// Das geklickte Button-Element
-			let btn = e.target,
-				// Holt den Würfeltyp vom übergeordneten .dice-Element
-				dice = btn.closest('.dice').getAttribute('data-type');
-			// Ruft Funktion zum Hinzufügen/Entfernen von Würfeln auf
-			removeOrAddDice(dice, btn.getAttribute('data-button'));
+			let btn = e.target;
+			// Findet das nächstgelegene übergeordnete .dice-Element
+			let diceElement = btn.closest('.dice');
+			// Holt den Würfeltyp aus dem data-type Attribut
+			let diceType = diceElement.getAttribute('data-type');
+			// Holt die Aktion (add/remove) aus dem data-button Attribut
+			let action = btn.getAttribute('data-button');
+			// Ruft die Funktion zum Hinzufügen/Entfernen auf
+			removeOrAddDice(diceType, action);
 		});
 	});
 
-	// Event-Listener für den Würfel-Button
+	/**
+	 * Event-Listener für den Würfel-Button (Hauptwürfelaktion)
+	 * Führt den Wurf aus und aktualisiert alle Anzeigen
+	 */
 	document.querySelector('#roll button').addEventListener('click', e => {
-		// Holt den Bereich, wo die Würfel angezeigt werden
-		let diceArea = document.querySelector('#dice-area'),
-			// Alle Würfel-Elemente im Würfelbereich
-			dices = diceArea.querySelectorAll('.area-dice'),
-			// Fortschritts-Anzeige-Element
-			progress = document.querySelector('#progress');
+		// Referenz zum Würfel-Anzeigebereich
+		let diceArea = document.querySelector('#dice-area');
+		// Alle aktuellen Würfel im Anzeigebereich
+		let dices = diceArea.querySelectorAll('.area-dice');
+		// Referenz zur Fortschrittsanzeige
+		let progress = document.querySelector('#progress');
+
 		// Initialisiert das Gesamtergebnis
 		let result = 0;
-		// Array für einzelne Würfelergebnisse
+		// Array für die einzelnen Würfelergebnisse
 		let diceResults = [];
 
-		// Erstellt ein neues Div für die aktuelle Würfelrunde
-		let element = document.createElement('div');
-		// Fügt CSS-Klasse hinzu
-		element.classList.add('progress-line');
-		// Setzt Index-Attribut
-		element.setAttribute('data-index', progress_index.toString());
+		// Erstellt ein neues div-Element für den Fortschrittsbalken
+		let progressElement = document.createElement('div');
+		// Fügt CSS-Klasse für Styling hinzu
+		progressElement.classList.add('progress-line');
+		// Setzt den Index für diesen Wurf
+		progressElement.setAttribute('data-index', progress_index);
 		// Erhöht den Index für den nächsten Wurf
 		progress_index++;
 
-		// Geht alle Würfel durch
+		/**
+		 * Verarbeitet jeden Würfel im Würfelbereich
+		 */
 		dices.forEach(dice => {
-			// Generiert Zufallszahl basierend auf Würfeltyp
-			let randomNumber = getRandomNumber(1, parseInt(dice.getAttribute('data-type')));
+			// Holt den Würfeltyp und konvertiert ihn zu einer Zahl
+			let diceType = parseInt(dice.getAttribute('data-type'));
+			// Generiert eine Zufallszahl zwischen 1 und Würfeltyp
+			let randomNumber = getRandomNumber(1, diceType);
+
 			// Addiert zum Gesamtergebnis
 			result += randomNumber;
-			// Fügt Ergebnis zum Array hinzu
-			diceResults.push(randomNumber);
-			// Setzt Attribut mit gewürfelter Zahl
-			dice.setAttribute('data-rolled', randomNumber.toString());
-			// Klont den Würfel und fügt ihn zum Runden-Div hinzu
-			element.appendChild(dice.cloneNode(true));
+
+			// Speichert Typ und Wert des Würfels
+			diceResults.push({
+				type: diceType,
+				value: randomNumber
+			});
+
+			// Aktualisiert die Anzeige des Würfels
+			let diceTypeSpan = dice.querySelector('.dice-type');
+			let rolledValueSpan = dice.querySelector('.rolled-value');
+			// Setzt den Würfeltyp (z.B. "W6")
+			diceTypeSpan.textContent = `W${diceType}`;
+			// Setzt den gewürfelten Wert (z.B. ": 4")
+			rolledValueSpan.textContent = `: ${randomNumber}`;
 		});
 
-		// Speichert Gesamtergebnis im Fortschritts-Element
+		// Speichert das Gesamtergebnis im Fortschritts-Element
 		progress.setAttribute('data-result', result);
-		// Fügt die Runde zum Fortschrittsbereich hinzu
-		progress.appendChild(element);
+		// Fügt das neue Fortschrittselement hinzu
+		progress.appendChild(progressElement);
 
 		// Aktualisiert die Ergebnis-Anzeige
-		let result_div = document.querySelector('#result');
-		result_div.innerHTML = result.toString();
+		document.querySelector('#result').innerHTML = result.toString();
 
-		// Erstellt Verlaufseintrag mit aktueller Zeit
-		const time = new Date().toLocaleTimeString();
+		/**
+		 * Erstellt einen neuen Verlaufseintrag
+		 */
 		const historyEntry = {
-			time: time,          // Uhrzeit des Wurfs
-			dice: diceResults,   // Array der Einzelergebnisse
-			total: result       // Gesamtsumme
+			time: new Date().toLocaleTimeString(),  // Aktuelle Uhrzeit
+			dice: diceResults,                     // Array mit Würfelergebnissen
+			total: result                          // Gesamtsumme
 		};
 
-		// Fügt Eintrag zum Verlauf hinzu
+		// Fügt den Eintrag zum Verlauf hinzu
 		historyEntries.push(historyEntry);
-
-		// Begrenzt den Verlauf auf 10 Einträge
-		if (historyEntries.length > 10) {
-			historyEntries.shift(); // Entfernt ältesten Eintrag
+		// Begrenzt den Verlauf auf 20 Einträge
+		if (historyEntries.length > 20) {
+			// Entfernt den ältesten Eintrag
+			historyEntries.shift();
 		}
 
 		// Aktualisiert die Verlaufsanzeige
 		updateHistoryDisplay();
 	});
 
-	// Funktion zur Aktualisierung der Verlaufsanzeige
+	/**
+	 * Aktualisiert die Verlaufsanzeige im UI
+	 */
 	function updateHistoryDisplay() {
-		// Setzt Titel im Verlaufs-Div
+		// Setzt den Titel und löscht alte Einträge
 		historyDiv.innerHTML = '<h3>Verlauf:</h3>';
 
-		// Geht Verlauf in umgekehrter Reihenfolge durch (neueste zuerst)
+		/**
+		 * Geht alle Einträge rückwärts durch (neueste zuerst)
+		 * slice() erstellt eine Kopie des Arrays, reverse() kehrt die Reihenfolge um
+		 */
 		historyEntries.slice().reverse().forEach(entry => {
-			// Erstellt Container für jeden Eintrag
+			// Erstellt ein neues div-Element für den Eintrag
 			const entryDiv = document.createElement('div');
+			// Fügt CSS-Klasse für Styling hinzu
 			entryDiv.classList.add('history-entry');
 
-			// Erstellt lesbare Würfel-Ergebnisse (z.B. "D6 + D4")
-			const diceString = entry.dice.map(d => `D${d}`).join(' + ');
+			/**
+			 * Erstellt den Anzeigetext für die Würfel
+			 * map() wandelt jedes Würfelobjekt in einen String um
+			 * join() verbindet sie mit " + "
+			 */
+			const diceString = entry.dice.map(d => `W${d.type}: ${d.value}`).join(' + ');
 
-			// Füllt den Eintrag mit Inhalt
+			// Setzt den Inhalt des Eintrags
 			entryDiv.innerHTML = `
                 <span class="history-time">${entry.time}</span>
                 <span class="history-dice">${diceString}</span>
                 <span class="history-total">= ${entry.total}</span>
             `;
 
-			// Fügt Eintrag zum Verlaufs-Div hinzu
+			// Fügt den Eintrag zum Verlaufscontainer hinzu
 			historyDiv.appendChild(entryDiv);
 		});
 	}
 
+	/* --- Hilfsfunktionen --- */
+
 	/**
-	 * Generiert eine Zufallszahl zwischen min und max
-	 * @param {number} min - Mindestwert
-	 * @param {number} max - Maximalwert
-	 * @returns {number} Zufallszahl
+	 * Generiert eine Zufallszahl zwischen min und max (inklusive)
 	 */
 	function getRandomNumber(min, max) {
-		// Berechnet Zufallszahl im Bereich [min, max]
+		// Math.random() gibt eine Zahl zwischen 0 (inkl.) und 1 (exkl.) zurück
+		// Math.floor() rundet ab, um eine ganze Zahl zu erhalten
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	/**
-	 * Fügt Würfel hinzu oder entfernt sie
-	 * @param {string} dice - Würfeltyp (z.B. "6" für D6)
-	 * @param {string} type - "add" oder "remove"
+	 * Fügt Würfel hinzu oder entfernt sie aus dem Würfelbereich
 	 */
-	function removeOrAddDice(dice, type) {
-		// Holt den Würfelbereich
-		let dice_area = document.querySelector('#dice-area');
+	function removeOrAddDice(diceType, action) {
+		// Referenz zum Würfelbereich
+		let diceArea = document.querySelector('#dice-area');
 
-		if (type === "remove") {
-			// Findet ersten Würfel des angegebenen Typs
-			let elem = dice_area.querySelector(".area-dice[data-type='" + dice + "']");
-			if (elem) {
-				elem.remove(); // Entfernt den Würfel
-			}
-		} else if (type === "add") {
-			// Fügt neuen Würfel hinzu
-			dice_area.appendChild(createHtmlDice(dice));
-		} else {
-			console.log("Ungültiger Button-Typ");
+		if (action === "remove") {
+			// Findet den ersten Würfel des angegebenen Typs
+			let elem = diceArea.querySelector(`.area-dice[data-type="${diceType}"]`);
+			// Wenn gefunden, entfernt ihn
+			if (elem) elem.remove();
+		} else if (action === "add") {
+			// Erstellt einen neuen Würfel und fügt ihn hinzu
+			diceArea.appendChild(createHtmlDice(diceType));
 		}
 
-		// Aktualisiert Button-Status
-		checkNumberInArea(dice_area);
-		// Aktualisiert Statistik-Anzeige
-		updateStatsWindow(dice_area);
+		// Aktualisiert die Button-Sichtbarkeit
+		checkNumberInArea(diceArea);
+		// Aktualisiert die Statistik
+		updateStatsWindow(diceArea);
 	}
 
 	/**
-	 * Erstellt ein Würfel-HTML-Element
-	 * @param {string} type - Würfeltyp
-	 * @returns {HTMLDivElement} Würfel-Element
+	 * Erstellt ein HTML-Element für einen Würfel
 	 */
 	function createHtmlDice(type) {
-		// Erstellt neues Div-Element
+		// Erstellt ein neues div-Element
 		let div = document.createElement('div');
-		// Fügt CSS-Klasse hinzu
+		// Fügt CSS-Klassen hinzu
 		div.classList.add('area-dice');
-		// Setzt data-type Attribut
+		// Setzt den Würfeltyp als data-Attribut
 		div.setAttribute('data-type', type);
+		// Setzt den Inhalt mit zwei spans für Typ und Wert
+		div.innerHTML = `
+            <span class="dice-type">W${type}</span>
+            <span class="rolled-value"></span>
+        `;
 		return div;
 	}
 
 	/**
-	 * Steuert Sichtbarkeit der Buttons basierend auf Würfelanzahl
-	 * @param {HTMLElement} area - Würfelbereich
+	 * Steuert die Sichtbarkeit der Buttons basierend auf der Würfelanzahl
 	 */
 	function checkNumberInArea(area) {
-		// Anzahl der Würfel im Bereich
-		let i = area.children.length,
-			// Container mit den Buttons
-			dices = document.querySelector('#dices');
+		// Aktuelle Anzahl der Würfel
+		let count = area.children.length;
+		// Alle Buttons mit data-button Attribut
+		let buttons = document.querySelectorAll('#dices button[data-button]');
 
-		switch (i) {
-			case 0: // Keine Würfel - nur Plus-Buttons anzeigen
-				dices.querySelectorAll('button[data-button]').forEach(b => {
-					if (b.getAttribute('data-button') === 'add') {
-						b.classList.remove('hide'); // Zeigt Add-Buttons
-					} else {
-						b.classList.add('hide'); // Versteckt Remove-Buttons
-					}
-				});
-				break;
-			case 1:
-			case 2:
-			case 3:
-			case 4: // 1-4 Würfel - alle Buttons anzeigen
-			default:
-				dices.querySelectorAll('button[data-button]').forEach(b => {
-					b.classList.remove('hide'); // Zeigt alle Buttons
-				});
-				break;
-			case 5: // Maximale Würfel - nur Minus-Buttons anzeigen
-				dices.querySelectorAll('button[data-button]').forEach(b => {
-					if (b.getAttribute('data-button') === 'add') {
-						b.classList.add('hide'); // Versteckt Add-Buttons
-					} else {
-						b.classList.remove('hide'); // Zeigt Remove-Buttons
-					}
-				});
-				break;
-		}
+		buttons.forEach(button => {
+			// Holt die Aktion des Buttons (add/remove)
+			let action = button.getAttribute('data-button');
+
+			// Logik für die Button-Anzeige:
+			if (count === 0) {
+				// Keine Würfel - nur Plus-Buttons zeigen
+				button.classList.toggle('hide', action !== 'add');
+			} else if (count === 5) {
+				// Maximale Würfel - nur Minus-Buttons zeigen
+				button.classList.toggle('hide', action !== 'remove');
+			} else {
+				// 1-4 Würfel - alle Buttons zeigen
+				button.classList.remove('hide');
+			}
+		});
 	}
 
 	/**
 	 * Aktualisiert die Statistik-Anzeige mit Wahrscheinlichkeiten
-	 * @param {HTMLElement} area - Würfelbereich
 	 */
 	function updateStatsWindow(area) {
 		// Alle Würfel im Bereich
 		const dices = area.querySelectorAll('.area-dice');
-		// Falls keine Würfel vorhanden sind
+
+		// Fallback wenn keine Würfel vorhanden sind
 		if (dices.length === 0) {
-			// Zeigt Standardnachricht
 			statDiv.innerHTML = '<h3>Statistik:</h3><p>Füge Würfel hinzu, um Wahrscheinlichkeiten zu sehen</p>';
 			return;
 		}
 
-		// Initialisiert min/max Werte
-		let minPossible = 0;
-		let maxPossible = 0;
-		// Array für Würfeltypen
-		let diceTypes = [];
+		// Wandelt NodeList in Array um und extrahiert die Würfeltypen
+		let diceTypes = Array.from(dices).map(d => parseInt(d.getAttribute('data-type')));
+		// Minimale Summe (jeder Würfel mindestens 1)
+		let minPossible = diceTypes.length;
+		// Maximale Summe (Summe aller Würfeltypen)
+		let maxPossible = diceTypes.reduce((sum, type) => sum + type, 0);
 
-		// Berechne minimal und maximal mögliche Summe
-		dices.forEach(dice => {
-			// Würfeltyp als Zahl
-			const type = parseInt(dice.getAttribute('data-type'));
-			// Addiert zu min/max
-			minPossible += 1;
-			maxPossible += type;
-			// Fügt Typ zum Array hinzu
-			diceTypes.push(type);
-		});
-
-		// Berechne Wahrscheinlichkeiten
+		// Berechnet Wahrscheinlichkeiten
 		let probMin = calculateProbability(diceTypes, minPossible);
 		let probMax = calculateProbability(diceTypes, maxPossible);
 
-		// Zeige die Ergebnisse formatiert an
+		// Aktualisiert die Anzeige mit formatierten Prozentwerten
 		statDiv.innerHTML = `
             <h3>Statistik:</h3>
-            <p>Minimale Summe (${minPossible}): ${(probMin * 100).toFixed(2)}% Wahrscheinlichkeit</p>
-            <p>Maximale Summe (${maxPossible}): ${(probMax * 100).toFixed(2)}% Wahrscheinlichkeit</p>
+            <p>Minimale Summe (${minPossible}): ${(probMin * 100).toFixed(2)}%</p>
+            <p>Maximale Summe (${maxPossible}): ${(probMax * 100).toFixed(2)}%</p>
         `;
 	}
 
 	/**
 	 * Berechnet die Wahrscheinlichkeit für eine bestimmte Summe
-	 * @param {Array} diceTypes - Array mit Würfeltypen (z.B. [6, 4] für D6 und D4)
-	 * @param {number} target - Zielsumme
-	 * @returns {number} Wahrscheinlichkeit (0-1)
 	 */
 	function calculateProbability(diceTypes, target) {
-		// Für einen einzelnen Würfel
+		// Für einzelne Würfel exakte Berechnung
 		if (diceTypes.length === 1) {
 			// Prüft ob Ziel im Bereich liegt
-			return target >= 1 && target <= diceTypes[0] ? 1 / diceTypes[0] : 0;
+			return (target >= 1 && target <= diceTypes[0]) ? 1 / diceTypes[0] : 0;
 		}
 
-		// Für mehrere Würfel - einfache Näherung
-		// Berechnet minimale und maximale Summe
-		const minSum = diceTypes.length;
-		const maxSum = diceTypes.reduce((a, b) => a + b, 0);
+		// Für mehrere Würfel vereinfachte Schätzung
+		let minSum = diceTypes.length;
+		let maxSum = diceTypes.reduce((sum, type) => sum + type, 0);
 
-		// Für min und max gibt es jeweils nur eine Kombination
+		// Für Min/Max genau berechnen
 		if (target === minSum || target === maxSum) {
-			// Berechnet Gesamtanzahl der Kombinationen
-			let combinations = 1;
-			diceTypes.forEach(d => {
-				combinations *= d;
-			});
+			// Berechnet die Anzahl möglicher Kombinationen
+			let combinations = diceTypes.reduce((total, type) => total * type, 1);
 			return 1 / combinations;
 		}
 
-		// Für andere Werte: einfache Schätzung
+		// Für andere Werte gleichmäßige Verteilung annehmen
 		return 1 / (maxSum - minSum + 1);
 	}
 };
