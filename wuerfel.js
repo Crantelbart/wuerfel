@@ -1,3 +1,6 @@
+// hallo
+
+
 // Wartet, bis das DOM vollständig geladen ist
 window.onload = function () {
 	// Zähler für Fortschrittsindex (wird für jede Würfelrunde erhöht)
