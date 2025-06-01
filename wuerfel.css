@@ -141,6 +141,7 @@
 		width: calc(100% - 10px);
 		border: 2px solid hotpink;
 		border-radius: 20px;
+		overflow-y: hidden;
 	}
 
 	.dice[data-type="2"] {
